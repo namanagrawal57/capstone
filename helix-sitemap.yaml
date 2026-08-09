@@ -1,0 +1,10 @@
+version: 1
+
+sitemaps:
+  default:
+    # Build the sitemap from the query index so newly published pages are
+    # included automatically. Served at /sitemap.xml on the production host.
+    source: /query-index.json
+    destination: /sitemap.xml
+    lastmod: lastModified
+    hostname: https://main--capstone--namanagrawal57.aem.live

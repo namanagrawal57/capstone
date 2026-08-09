@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "projectType": "da"
+  },
+  "templates": [
+    {
+      "name": "home",
+      "urls": [
+        "https://wknd.site/us/en.html"
+      ],
+      "coverageGaps": [],
+      "description": "WKND home page: hero carousel, featured article teaser, recent articles card list, adventure teaser, and adventures card list.",
+      "blocks": [
+        { "name": "hero", "instances": [".cmp-carousel", ".cmp-teaser--hero"] },
+        { "name": "columns", "instances": [".cmp-teaser--featured"] },
+        { "name": "article-list", "instances": [".image-list.list"] }
+      ]
+    },
+    {
+      "name": "magazine-listing",
+      "urls": [
+        "https://wknd.site/us/en/magazine.html"
+      ],
+      "coverageGaps": [],
+      "description": "Magazine section landing page: page title, featured article teaser, and a full list of magazine article cards (to be driven by the query index).",
+      "blocks": [
+        { "name": "columns", "instances": [".cmp-teaser--featured"] },
+        { "name": "article-list", "instances": [".image-list.list"] }
+      ]
+    },
+    {
+      "name": "about",
+      "urls": [
+        "https://wknd.site/us/en/about-us.html"
+      ],
+      "coverageGaps": [],
+      "description": "About Us page: contributor grid (name, role/title, social links) and WKND guides grid. Source of the custom contributor and social-links blocks.",
+      "blocks": [
+        { "name": "contributor", "instances": [".cmp-experience-fragment--contributor"] }
+      ]
+    },
+    {
+      "name": "article",
+      "urls": [
+        "https://wknd.site/us/en/magazine/arctic-surfing.html",
+        "https://wknd.site/us/en/magazine/guide-la-skateparks.html",
+        "https://wknd.site/us/en/magazine/san-diego-surf.html",
+        "https://wknd.site/us/en/magazine/ski-touring.html",
+        "https://wknd.site/us/en/magazine/western-australia.html"
+      ],
+      "coverageGaps": [],
+      "description": "Magazine article page: hero image, title, byline, article body with headings/quotes, contributor block (writer/photographer name, title, avatar) and author social links.",
+      "blocks": [
+        { "name": "contributor", "instances": [".cmp-byline"] }
+      ]
+    }
+  ]
+}
