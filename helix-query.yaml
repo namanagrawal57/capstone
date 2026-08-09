@@ -1,0 +1,53 @@
+version: 1
+
+indices:
+  # Site-wide query index. Drives both the dynamic article-list block (which
+  # filters rows by path prefix, e.g. /magazine/) and the sitemap
+  # (helix-sitemap.yaml sources from /query-index.json). Publishing a new page
+  # that matches the include rules adds a row here automatically.
+  default:
+    target: /query-index.json
+    include:
+      - /**
+    exclude:
+      - /drafts/**
+      - /nav
+      - /footer
+      - /fragments/**
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: |
+          attribute(el, 'content')
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+      author:
+        select: head > meta[name="author"]
+        value: |
+          attribute(el, 'content')
+      category:
+        select: head > meta[name="category"]
+        value: |
+          attribute(el, 'content')
+      template:
+        select: head > meta[name="template"]
+        value: |
+          attribute(el, 'content')
+      publishDate:
+        select: head > meta[name="publishdate"]
+        value: |
+          attribute(el, 'content')
+      robots:
+        select: head > meta[name="robots"]
+        value: |
+          attribute(el, 'content')
+      lastModified:
+        select: none
+        value: |
+          parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')

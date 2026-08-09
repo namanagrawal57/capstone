@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://main--capstone--namanagrawal57.aem.live/sitemap.xml

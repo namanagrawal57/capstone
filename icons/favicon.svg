@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="WKND">
+  <rect width="64" height="64" rx="10" fill="#131313"/>
+  <text x="32" y="41" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700"
+        text-anchor="middle" fill="#ffd700">WK</text>
+  <text x="32" y="57" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700"
+        text-anchor="middle" fill="#ffffff">ND</text>
+</svg>

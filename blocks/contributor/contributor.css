@@ -1,0 +1,63 @@
+.contributor .contributor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid #dadada;
+  background-color: var(--background-color);
+}
+
+.contributor .contributor-avatar {
+  flex: 0 0 auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.contributor .contributor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contributor .contributor-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.contributor .contributor-name {
+  margin: 0;
+  font-size: var(--heading-font-size-s);
+}
+
+.contributor .contributor-title {
+  margin: 0;
+  color: var(--dark-color);
+  font-size: var(--body-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* When placed on an article, allow a horizontal layout with the byline */
+.contributor.byline .contributor-card {
+  flex-direction: row;
+  text-align: left;
+  border: 0;
+  padding: 16px 0;
+}
+
+.contributor.byline .contributor-body {
+  align-items: flex-start;
+}
+
+@media (width >= 600px) {
+  .contributor .contributor-card {
+    padding: 32px 24px;
+  }
+}
