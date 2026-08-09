@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WKND Tag Picker</title>
+  <link rel="stylesheet" href="./tag-picker.css" />
+</head>
+<body>
+  <main class="tag-picker">
+    <h1 class="tag-picker-title">Tags</h1>
+    <p class="tag-picker-hint">Select tags to insert into your document. They are added as a comma-separated list.</p>
+    <div class="tag-picker-search">
+      <label for="tag-filter" class="sr-only">Filter tags</label>
+      <input id="tag-filter" type="search" placeholder="Filter tags…" autocomplete="off" />
+    </div>
+    <ul class="tag-picker-list" id="tag-list" aria-label="Available tags"></ul>
+    <div class="tag-picker-actions">
+      <output class="tag-picker-selected" id="selected-count">0 selected</output>
+      <button type="button" class="tag-picker-insert" id="insert" disabled>Insert tags</button>
+    </div>
+  </main>
+  <script type="module" src="./tag-picker.js"></script>
+</body>
+</html>
