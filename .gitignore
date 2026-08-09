@@ -13,8 +13,8 @@ helix-importer-ui
 !AGENTS.md
 
 # local importer helpers / artifacts (not for production)
-tools/importer/_verify.mjs
 tools/importer/*.bundle.js
 tools/importer/reports/
 tools/importer/urls-*.txt
 content/query-index.json
+tools/importer/_*.mjs
