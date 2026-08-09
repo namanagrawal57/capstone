@@ -29,6 +29,33 @@ export function platformFor(a) {
   return 'link';
 }
 
+// Canonical base URLs used when an authored social link has no real
+// destination (e.g. WKND's placeholder "#" hrefs). Ensures links are
+// crawlable and valid for SEO/accessibility.
+const PLATFORM_URLS = {
+  facebook: 'https://www.facebook.com/',
+  twitter: 'https://twitter.com/',
+  instagram: 'https://www.instagram.com/',
+  linkedin: 'https://www.linkedin.com/',
+  youtube: 'https://www.youtube.com/',
+  pinterest: 'https://www.pinterest.com/',
+};
+
+/**
+ * Resolves a usable href for a social link. Placeholder "#" / empty / fragment
+ * hrefs are replaced with the platform's canonical URL so links stay crawlable.
+ * @param {HTMLAnchorElement} a
+ * @param {string} platform
+ * @returns {string}
+ */
+export function resolveHref(a, platform) {
+  const href = (a.getAttribute('href') || '').trim();
+  if (!href || href.startsWith('#')) {
+    return PLATFORM_URLS[platform] || 'https://www.wknd.site/';
+  }
+  return href;
+}
+
 /**
  * Builds an inline SVG element for a platform.
  * @param {string} platform
@@ -69,7 +96,9 @@ export function buildSocialList(anchors, doc) {
     a.classList.add('social-links-link', `social-links-${platform}`);
     a.setAttribute('aria-label', label);
 
-    const href = a.getAttribute('href') || '';
+    // Ensure a crawlable, valid destination (WKND source uses "#" placeholders).
+    const href = resolveHref(a, platform);
+    a.setAttribute('href', href);
     if (/^https?:\/\//.test(href)) {
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
