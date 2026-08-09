@@ -25,8 +25,10 @@ export default {
     });
     main.append(nav);
 
-    // Follow Us + Social Links block
-    const follow = document.createElement('h4');
+    // Follow Us + Social Links block.
+    // Use h2 so footer headings don't skip levels after the page's h1
+    // (avoids a Lighthouse/axe "heading-order" accessibility violation).
+    const follow = document.createElement('h2');
     follow.textContent = 'Follow Us';
     main.append(follow);
     const listCell = document.createElement('div');
