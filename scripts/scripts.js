@@ -10,6 +10,7 @@ import {
   loadSections,
   loadCSS,
   buildBlock,
+  getMetadata,
 } from './aem.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -160,7 +161,9 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  document.documentElement.lang = 'en';
+  // Honor a per-page/locale `lang` from the metadata (bulk metadata sets this
+  // for locale sub-trees, e.g. /fr/**). Falls back to English.
+  document.documentElement.lang = getMetadata('lang') || 'en';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
