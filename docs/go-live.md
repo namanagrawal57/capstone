@@ -87,7 +87,7 @@ section `<div>`) is treated as a section wrapper and never decorates.
 
 ## Second locale (/fr) — how rollout scales
 
-The `/fr` home page demonstrates locale support:
+The `/fr/` home page demonstrates locale support:
 - Locale content lives under a path prefix (`/fr/**`) in DA.
 - Bulk metadata (`metadata.json`) maps `/fr/**` → `lang: fr` and locale-specific
   `nav: /fr/nav`, `footer: /fr/footer`. `scripts.js` reads the `lang` metadata
