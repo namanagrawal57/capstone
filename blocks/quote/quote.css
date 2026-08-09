@@ -1,0 +1,41 @@
+/*
+ * Review note: intentionally NO decorative curly-quote ::before/::after.
+ * WKND source quotes often already include literal quotation marks, so adding
+ * them in CSS would double-quote the text. A left accent border reads as a
+ * pull-quote without that risk.
+ */
+.quote blockquote {
+  margin: 0;
+  padding: 0 0 0 20px;
+  border-left: 4px solid var(--link-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--body-font-size-m);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-color);
+}
+
+.quote blockquote p {
+  margin: 0;
+}
+
+.quote .quote-attribution {
+  display: block;
+  margin-top: 16px;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-style: normal;
+  font-weight: 400;
+  color: var(--dark-color);
+}
+
+.quote .quote-attribution::before {
+  content: "\2014\00A0";
+}
+
+@media (width >= 600px) {
+  .quote blockquote {
+    font-size: var(--heading-font-size-s);
+  }
+}
