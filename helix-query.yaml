@@ -1,21 +1,19 @@
 version: 1
 
 indices:
-  # Site-wide query index. Drives both:
-  #   - the dynamic article-list block (filters rows by path prefix, e.g. /magazine/)
-  #   - the sitemap (helix-sitemap.yaml sources from /query-index.json)
-  # Publishing a new page that matches the include rules adds a row here
-  # automatically — no code change needed.
+  # Site-wide query index. Drives both the dynamic article-list block (which
+  # filters rows by path prefix, e.g. /magazine/) and the sitemap
+  # (helix-sitemap.yaml sources from /query-index.json). Publishing a new page
+  # that matches the include rules adds a row here automatically.
   default:
-    include:
-      - '/**'
-    exclude:
-      - '/drafts/**'
-      - '/**/drafts/**'
-      - '/nav'
-      - '/footer'
-      - '/fragments/**'
     target: /query-index.json
+    include:
+      - /**
+    exclude:
+      - /drafts/**
+      - /nav
+      - /footer
+      - /fragments/**
     properties:
       title:
         select: head > meta[property="og:title"]
@@ -28,7 +26,7 @@ indices:
       image:
         select: head > meta[property="og:image"]
         value: |
-          match(attribute(el, 'content'), 'https:\/\/[^"]*')
+          match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
       author:
         select: head > meta[name="author"]
         value: |
@@ -44,8 +42,12 @@ indices:
       publishDate:
         select: head > meta[name="publishdate"]
         value: |
-          dateValue(attribute(el, 'content'), 'YYYY-MM-DD')
+          attribute(el, 'content')
+      robots:
+        select: head > meta[name="robots"]
+        value: |
+          attribute(el, 'content')
       lastModified:
         select: none
         value: |
-          parseTimestamp(headers('last-modified'), 'ddd, DD MMM YYYY hh:mm:ss GMT')
+          parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
