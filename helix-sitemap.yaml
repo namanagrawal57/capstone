@@ -3,8 +3,10 @@ version: 1
 sitemaps:
   default:
     # Build the sitemap from the query index so newly published pages are
-    # included automatically. Served at /sitemap.xml on the production host.
+    # included automatically. Served at /sitemap.xml.
+    # `origin` sets the absolute host for <loc> URLs (include the protocol).
+    # Swap this for the custom production domain at go-live.
+    origin: https://main--capstone--namanagrawal57.aem.live
     source: /query-index.json
     destination: /sitemap.xml
-    lastmod: lastModified
-    hostname: https://main--capstone--namanagrawal57.aem.live
+    lastmod: YYYY-MM-DD
