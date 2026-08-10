@@ -1,0 +1,41 @@
+.adventure-details {
+  background-color: var(--light-color);
+  padding: 24px;
+}
+
+.adventure-details .adventure-details-list {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.adventure-details .adventure-details-item {
+  padding: 16px 0;
+  border-bottom: 1px solid #dadada;
+}
+
+.adventure-details .adventure-details-item dt {
+  font-size: var(--body-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--dark-color);
+}
+
+.adventure-details .adventure-details-item dd {
+  margin: 4px 0 0;
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-s);
+}
+
+@media (width >= 900px) {
+  .adventure-details .adventure-details-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 32px;
+  }
+
+  /* remove the bottom border on the last row of the 3-column grid */
+  .adventure-details .adventure-details-item:nth-last-child(-n+3) {
+    border-bottom: 0;
+  }
+}

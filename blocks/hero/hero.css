@@ -5,20 +5,44 @@
 
 .hero {
   position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 48px 24px;
+  min-height: 60vh;
+  color: var(--background-color);
+}
+
+/* dark scrim so the heading/CTA stay legible over any image */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgb(0 0 0 / 10%) 0%, rgb(0 0 0 / 55%) 100%);
+}
+
+.hero > div {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 0 12px;
+  max-width: 18ch;
   color: var(--background-color);
+  font-size: var(--heading-font-size-xxl);
+}
+
+.hero p {
+  max-width: 48ch;
+  font-size: var(--body-font-size-m);
 }
 
 .hero picture {
   position: absolute;
-  z-index: -1;
+  z-index: -2;
   inset: 0;
   object-fit: cover;
   box-sizing: border-box;
@@ -32,6 +56,7 @@
 
 @media (width >= 900px) {
   .hero {
-    padding: 40px 32px;
+    padding: 64px 32px;
+    min-height: 72vh;
   }
 }
