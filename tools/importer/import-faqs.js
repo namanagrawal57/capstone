@@ -68,11 +68,11 @@ export default {
     s2.append(WebImporter.DOMUtils.createTable(rows, document));
     main.append(s2);
 
-    // Section 3: need more help
+    // Section 3: need more help (h2 keeps heading order monotonic after the h1)
     const s3 = document.createElement('div');
-    const h3 = document.createElement('h3');
-    h3.textContent = 'Need more help?';
-    s3.append(h3);
+    const h2 = document.createElement('h2');
+    h2.textContent = 'Need more help?';
+    s3.append(h2);
     const help = document.createElement('p');
     help.innerHTML = 'Give us a call at <a href="tel:18008000000">1-800-800-0000</a> or e-mail us at <a href="mailto:info@wknd.com">info@wknd.com</a>. We love to talk adventures!';
     s3.append(help);
