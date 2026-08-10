@@ -1,0 +1,55 @@
+.accordion .accordion-item {
+  border-bottom: 1px solid #dadada;
+}
+
+.accordion .accordion-item-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-s);
+  cursor: pointer;
+  list-style: none;
+}
+
+/* remove the default disclosure triangle */
+.accordion .accordion-item-label::-webkit-details-marker {
+  display: none;
+}
+
+/* custom +/- indicator */
+.accordion .accordion-item-label::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--text-color);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.accordion .accordion-item[open] .accordion-item-label::after {
+  transform: rotate(-135deg);
+}
+
+.accordion .accordion-item-label:hover {
+  color: var(--dark-color);
+}
+
+.accordion .accordion-item-label:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: 2px;
+}
+
+.accordion .accordion-item-body {
+  padding: 0 0 20px;
+  color: var(--text-color);
+  max-width: 70ch;
+}
+
+.accordion .accordion-item-body > :first-child {
+  margin-top: 0;
+}

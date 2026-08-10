@@ -53,6 +53,44 @@
       "blocks": [
         { "name": "contributor", "instances": [".cmp-byline"] }
       ]
+    },
+    {
+      "name": "adventure",
+      "urls": [
+        "https://wknd.site/us/en/adventures/climbing-new-zealand.html",
+        "https://wknd.site/us/en/adventures/yosemite-backpacking.html",
+        "https://wknd.site/us/en/adventures/tahoe-skiing.html",
+        "https://wknd.site/us/en/adventures/whistler-mountain-biking.html",
+        "https://wknd.site/us/en/adventures/west-coast-cycling.html",
+        "https://wknd.site/us/en/adventures/bali-surf-camp.html"
+      ],
+      "coverageGaps": [],
+      "description": "Adventure detail page: hero image, title, adventure-details block (activity, trip length, group size, difficulty, price), and overview body.",
+      "blocks": [
+        { "name": "adventure-details", "instances": ["dl"] }
+      ]
+    },
+    {
+      "name": "adventures-listing",
+      "urls": [
+        "https://wknd.site/us/en/adventures.html"
+      ],
+      "coverageGaps": [],
+      "description": "Adventures section landing page: title, intro, and an index-driven article-list block filtered to /adventures/.",
+      "blocks": [
+        { "name": "article-list", "instances": [".image-list.list"] }
+      ]
+    },
+    {
+      "name": "faqs",
+      "urls": [
+        "https://wknd.site/us/en/faqs.html"
+      ],
+      "coverageGaps": [],
+      "description": "FAQs page: title, hero, intro, an accordion block of Q&A, and a need-more-help section.",
+      "blocks": [
+        { "name": "accordion", "instances": [".cmp-accordion"] }
+      ]
     }
   ]
 }

@@ -69,7 +69,9 @@ function buildCard(row) {
   link.className = 'article-list-link';
 
   if (row.image && row.image !== '0') {
-    const picture = createOptimizedPicture(row.image, row.title || '', false, [{ width: '750' }]);
+    // Decorative alt: the card title next to it already names the article, so
+    // an alt duplicating the title triggers axe's image-redundant-alt.
+    const picture = createOptimizedPicture(row.image, '', false, [{ width: '750' }]);
     const imageWrap = document.createElement('div');
     imageWrap.className = 'article-list-image';
     imageWrap.append(picture);
@@ -79,7 +81,9 @@ function buildCard(row) {
   const bodyWrap = document.createElement('div');
   bodyWrap.className = 'article-list-body';
 
-  const title = document.createElement('h3');
+  // h2: listing pages have an h1 then these cards with no intervening heading,
+  // so h2 keeps the heading order monotonic (avoids axe heading-order).
+  const title = document.createElement('h2');
   title.className = 'article-list-title';
   title.textContent = row.title || row.path;
   bodyWrap.append(title);
