@@ -38,8 +38,10 @@
   --heading-font-size-s: 20px;
   --heading-font-size-xs: 18px;
 
-  /* nav height */
+  /* nav height (25px dark utility strip + 64px white main bar) */
   --nav-height: 89px;
+  --nav-utility-height: 25px;
+  --nav-main-height: 64px;
 }
 
 /* fallback fonts (metric-adjusted to reduce CLS while web fonts load) */

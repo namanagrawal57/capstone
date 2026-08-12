@@ -151,6 +151,20 @@ export default async function decorate(block) {
     });
   }
 
+  // turn the authored "Search" placeholder in the tools area into a real
+  // search box with a magnifier icon (matches wknd.site).
+  const navTools = nav.querySelector('.nav-tools');
+  if (navTools) {
+    navTools.textContent = '';
+    const form = document.createElement('div');
+    form.className = 'nav-search';
+    form.innerHTML = `<span class="nav-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.82 10.64l4.77 4.77 1.41-1.41-4.77-4.77A6 6 0 0 0 10 4Zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/></svg>
+      </span>
+      <input type="search" class="nav-search-input" placeholder="Search" aria-label="Search" />`;
+    navTools.append(form);
+  }
+
   // hamburger for mobile
   const hamburger = document.createElement('div');
   hamburger.classList.add('nav-hamburger');
@@ -164,8 +178,17 @@ export default async function decorate(block) {
   toggleMenu(nav, navSections, isDesktop.matches);
   isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
+  // top utility strip (Sign In + language toggle) — dark bar above the main nav
+  const utility = document.createElement('div');
+  utility.className = 'nav-utility';
+  utility.innerHTML = `<div class="nav-utility-inner">
+      <a class="nav-signin" href="#sign-in">Sign In</a>
+      <a class="nav-lang" href="#lang"><span class="nav-lang-flag" aria-hidden="true">&#127482;&#127480;</span>EN-US<span class="nav-lang-caret" aria-hidden="true"></span></a>
+    </div>`;
+
   const navWrapper = document.createElement('div');
   navWrapper.className = 'nav-wrapper';
+  navWrapper.append(utility);
   navWrapper.append(nav);
   block.append(navWrapper);
 }
