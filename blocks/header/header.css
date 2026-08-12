@@ -382,7 +382,8 @@ header .nav-search-input {
 }
 
 header .nav-search-input::placeholder {
-  color: var(--dark-color);
+  /* #595959 on the ~#f4f4f4 field = 6.4:1, a comfortable AA margin */
+  color: #595959;
   opacity: 1;
 }
 
