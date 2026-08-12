@@ -1,11 +1,40 @@
 /* stylelint-disable max-line-length */
 
 /*
- * WKND web fonts from Google Fonts:
+ * WKND web fonts, self-hosted (latin subset) to keep them off the third-party
+ * critical path — avoids the Google Fonts CDN connect/fetch that cost LCP.
  *   - Asar (serif) for headings
  *   - Source Sans Pro (sans) for body/UI
- * Loaded in the lazy phase (fonts.css) so it stays off the LCP critical path;
- * &display=swap avoids invisible text, and metric-adjusted fallbacks in
- * styles.css (asar-fallback / source-sans-fallback) minimise layout shift.
+ * font-display: swap + metric-adjusted fallbacks in styles.css minimise CLS.
  */
-@import url("https://fonts.googleapis.com/css2?family=Asar&family=Source+Sans+Pro:wght@400;600;700&display=swap");
+@font-face {
+  font-family: asar;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/asar-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/source-sans-pro-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/source-sans-pro-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/source-sans-pro-700.woff2') format('woff2');
+}
