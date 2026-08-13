@@ -139,9 +139,10 @@ export default {
     const s3 = document.createElement('div');
     s3.append(body);
 
-    // Metadata
+    // Metadata — keep Title clean (site name comes from og:site_name via bulk
+    // metadata); the index-driven Adventures cards use this Title verbatim.
     const meta = {};
-    meta.Title = `${h1.textContent.trim()} | WKND`;
+    meta.Title = h1.textContent.trim();
     const firstPara = body.querySelector('p');
     meta.Description = firstPara ? firstPara.textContent.trim().slice(0, 160) : `Join WKND for ${h1.textContent.trim()}.`;
     if (hero) {
