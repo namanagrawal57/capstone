@@ -9,14 +9,18 @@ import { readBlockConfig, createOptimizedPicture } from '../../scripts/aem.js';
  * with no code change.
  *
  * Content model (all rows optional):
- *   | Article List |                    |
- *   | ------------ | ------------------ |
- *   | Path         | /magazine/         |
- *   | Limit        | 12                 |
- *   | Index        | /query-index.json  |
+ *   | Article List |                              |
+ *   | ------------ | ---------------------------- |
+ *   | Path         | /magazine/                   |
+ *   | Limit        | 12                           |
+ *   | Index        | /query-index.json            |
+ *   | Tabs         | All, Climbing, Cycling, …    |
+ *   | Sort         | title                        |
  *
  * Defaults: lists everything under /magazine/ (excluding the listing page
- * itself), newest first, from /query-index.json.
+ * itself), newest first, from /query-index.json. When `Tabs` is set, a filter
+ * bar is rendered and cards are filtered by their `category` field; the first
+ * tab (e.g. "All") shows everything.
  */
 
 const DEFAULTS = {
@@ -101,6 +105,44 @@ function buildCard(row) {
 }
 
 /**
+ * Renders the tab bar and wires up filtering of the card list by category.
+ * @param {Element} block
+ * @param {HTMLUListElement} list
+ * @param {string[]} tabs first tab (e.g. "All") shows everything
+ */
+function renderTabs(block, list, tabs) {
+  const tablist = document.createElement('div');
+  tablist.className = 'article-list-tabs';
+  tablist.setAttribute('role', 'tablist');
+
+  const applyFilter = (category) => {
+    [...list.children].forEach((li) => {
+      const match = !category || (li.dataset.category || '').toLowerCase() === category.toLowerCase();
+      li.hidden = !match;
+    });
+  };
+
+  tabs.forEach((label, i) => {
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'article-list-tab';
+    tab.textContent = label;
+    tab.setAttribute('role', 'tab');
+    tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    // first tab ("All") clears the filter
+    const category = i === 0 ? '' : label;
+    tab.addEventListener('click', () => {
+      tablist.querySelectorAll('.article-list-tab').forEach((t) => t.setAttribute('aria-selected', 'false'));
+      tab.setAttribute('aria-selected', 'true');
+      applyFilter(category);
+    });
+    tablist.append(tab);
+  });
+
+  block.append(tablist);
+}
+
+/**
  * loads and decorates the article-list block
  * @param {Element} block The block element
  */
@@ -109,6 +151,10 @@ export default async function decorate(block) {
   const path = config.path || DEFAULTS.path;
   const indexUrl = config.index || DEFAULTS.index;
   const limit = parseInt(config.limit, 10) || DEFAULTS.limit;
+  const sort = (config.sort || '').toLowerCase();
+  const tabs = config.tabs
+    ? config.tabs.split(',').map((t) => t.trim()).filter(Boolean)
+    : null;
 
   block.textContent = '';
 
@@ -122,7 +168,11 @@ export default async function decorate(block) {
       // exclude the section landing page itself (e.g. /magazine)
       .filter((row) => row.path.replace(/\/$/, '') !== path.replace(/\/$/, ''));
 
-    articles.sort((a, b) => rowDate(b) - rowDate(a));
+    if (sort === 'title') {
+      articles.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    } else {
+      articles.sort((a, b) => rowDate(b) - rowDate(a));
+    }
     if (limit > 0) articles = articles.slice(0, limit);
 
     if (articles.length === 0) {
@@ -133,7 +183,12 @@ export default async function decorate(block) {
       return;
     }
 
-    articles.forEach((row) => list.append(buildCard(row)));
+    if (tabs && tabs.length > 1) renderTabs(block, list, tabs);
+    articles.forEach((row) => {
+      const card = buildCard(row);
+      if (row.category) card.dataset.category = row.category;
+      list.append(card);
+    });
     block.append(list);
   } catch (error) {
     // eslint-disable-next-line no-console
