@@ -44,8 +44,15 @@ function buildCard(row) {
 
   const name = body.querySelector('h1, h2, h3, h4, h5, h6');
   if (name) name.classList.add('contributors-name');
+  // The role is authored as a heading (h5) but is really a subtitle; render it
+  // as a <p> so heading levels don't skip (avoids axe/Lighthouse heading-order).
   const role = name?.nextElementSibling;
-  if (role && /^H[1-6]$/.test(role.tagName)) role.classList.add('contributors-role');
+  if (role && /^H[1-6]$/.test(role.tagName)) {
+    const p = document.createElement('p');
+    p.className = 'contributors-role';
+    p.textContent = role.textContent;
+    role.replaceWith(p);
+  }
 
   // Social links → accessible icon buttons (reuses social-links rendering)
   const anchors = [...body.querySelectorAll('a[href]')];
