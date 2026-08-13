@@ -1,71 +1,94 @@
 /* global WebImporter */
 /*
  * Import script for the WKND About Us page.
- * Produces H1, section headings/intros, and one Contributor block per person
- * (avatar, name, role, and their social links), then Metadata.
- * Self-contained (mirrors the standard-contract parsers in ./parsers).
+ * Matches wknd.site: two sections — "Our Contributors" (4) and "WKND Guides"
+ * (3) — each an intro + a Contributors grid block (avatar, name, role, social).
+ * Self-contained; contributor roster is curated from the source page.
  */
 
 const PROXY = 'https://wknd.site';
+const AV = '/master/_jcr_content/root/container/image.coreimg.jpeg';
 
-function resolveImage(document, el, alt = '') {
-  if (!el) return null;
-  const imgEl = el.tagName === 'IMG' ? el : el.querySelector('img');
-  let src = (imgEl && (imgEl.getAttribute('src') || (imgEl.getAttribute('srcset') || '').split(' ')[0]))
-    || el.getAttribute('data-cmp-src')
-    || (el.querySelector && el.querySelector('[data-cmp-src]') && el.querySelector('[data-cmp-src]').getAttribute('data-cmp-src'));
-  if (!src) return null;
-  src = src.replace('{.width}', '');
-  if (src.startsWith('/')) src = `${PROXY}${src}`;
-  const img = document.createElement('img');
-  img.src = src;
-  img.alt = alt || (imgEl && imgEl.getAttribute('alt')) || '';
-  return img;
-}
+// name, role, avatar path, and social handle hrefs (from wknd.site)
+const CONTRIBUTORS = [
+  {
+    name: 'Stacey Roswells',
+    role: 'Artist | Photographer | Traveler',
+    img: `/content/experience-fragments/wknd/language-masters/en/contributors/stacey-roswells${AV}/1660323785093/stacey-roswells.jpeg`,
+    social: [['Facebook', '#facebook-staceyroswell'], ['Twitter', '#twitter-staceyroswells'], ['Instagram', '#insta-staceyroswells']],
+  },
+  {
+    name: 'Jake Hammer',
+    role: 'Influencer | Writer',
+    img: `/content/experience-fragments/wknd/language-masters/en/contributors/jake-hammer${AV}/1660323785595/alex-iby-343837.jpeg`,
+    social: [['Facebook', '#facebook-jakehammer'], ['Twitter', '#twitter-jakehammer'], ['Instagram', '#instagram-jakehammer']],
+  },
+  {
+    name: 'Ian Provo',
+    role: 'Photographer',
+    img: `/content/experience-fragments/wknd/language-masters/en/contributors/ian-provo${AV}/1660323783653/ian-provo.jpeg`,
+    social: [['Facebook', '#facebook-ianprovo'], ['Twitter', '#twitter-ianprovo'], ['Instagram', '#instagram-ianprovo']],
+  },
+  {
+    name: 'Jacob Wester',
+    role: 'Skater | Writer',
+    img: `/content/experience-fragments/wknd/language-masters/en/contributors/jacob-wester${AV}/1660323792237/jacob-wester.jpeg`,
+    social: [['Facebook', '#jacob-wester'], ['Twitter', '#jacob-wester'], ['Instagram', '#jacob-wester']],
+  },
+];
 
-function appendContributor(main, document, wrapper) {
-  const nameEl = wrapper.querySelector('h1, h2, h3, h4');
-  const name = nameEl ? nameEl.textContent.trim() : '';
-  if (!name) return false;
-  const roleEl = wrapper.querySelector('h5, h6');
-  const avatar = resolveImage(document, wrapper.querySelector('.cmp-image, [data-cmp-is="image"], img'), name);
+const GUIDES = [
+  {
+    name: 'Sofia Sjöberg',
+    role: 'Photographer | Youtuber',
+    img: `/content/experience-fragments/wknd/language-masters/en/contributors/sofia-sjoeberg${AV}/1660323785351/ayo-ogunseinde-237739.jpeg`,
+    social: [['Facebook', 'https://www.facebook.com/'], ['Twitter', 'https://twitter.com/'], ['Instagram', 'https://www.instagram.com/']],
+  },
+  {
+    name: 'Justin Barr',
+    role: 'Artist | Rock Climber',
+    img: `/content/experience-fragments/wknd/language-masters/en/contributors/justin-barr${AV}/1660323786548/justin-barr.jpeg`,
+    social: [['Facebook', 'https://www.facebook.com/'], ['Twitter', 'https://twitter.com/'], ['Instagram', 'https://www.instagram.com/']],
+  },
+  {
+    name: 'Kumar Selveraj',
+    role: 'Photographer | Surfer',
+    img: `/content/experience-fragments/wknd/language-masters/en/contributors/kumar-selveraj${AV}/1660323783843/kumar-selvaraj.jpeg`,
+    social: [['Facebook', '#selveraj'], ['Instagram', '#selveraj'], ['Twitter', '#selveraj']],
+  },
+];
 
-  const avatarCell = document.createElement('div');
-  if (avatar) avatarCell.append(avatar);
-  const bodyCell = document.createElement('div');
-  const h3 = document.createElement('h3');
-  h3.textContent = name;
-  bodyCell.append(h3);
-  if (roleEl && roleEl.textContent.trim()) {
-    const rp = document.createElement('p');
-    rp.textContent = roleEl.textContent.trim();
-    bodyCell.append(rp);
-  }
+/** Builds a Contributors grid block table for a list of people. */
+function contributorsBlock(document, people) {
+  const rows = [['Contributors']];
+  people.forEach((person) => {
+    const imgCell = document.createElement('div');
+    const img = document.createElement('img');
+    img.src = `${PROXY}${person.img}`;
+    img.alt = person.name;
+    imgCell.append(img);
 
-  const byHref = new Map();
-  wrapper.querySelectorAll('a[aria-label], a[href^="#"], a[href^="http"]').forEach((a) => {
-    const text = (a.textContent || '').trim();
-    const key = (text || a.getAttribute('aria-label') || a.getAttribute('href') || '').toLowerCase();
-    if (key && !byHref.has(key)) byHref.set(key, a);
-  });
-  const links = [...byHref.values()];
-  if (links.length) {
+    const bodyCell = document.createElement('div');
+    const h3 = document.createElement('h3');
+    h3.textContent = person.name;
+    bodyCell.append(h3);
+    const h5 = document.createElement('h5');
+    h5.textContent = person.role;
+    bodyCell.append(h5);
     const ul = document.createElement('ul');
-    links.forEach((a) => {
+    person.social.forEach(([label, href]) => {
       const li = document.createElement('li');
-      const link = document.createElement('a');
-      link.href = a.getAttribute('href') || '#';
-      const visible = (a.textContent || '').trim();
-      link.textContent = visible || (a.getAttribute('aria-label') || 'Social').trim();
-      li.append(link);
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = label;
+      li.append(a);
       ul.append(li);
     });
     bodyCell.append(ul);
-  }
 
-  const cells = avatar ? [['Contributor'], [avatarCell, bodyCell]] : [['Contributor'], [bodyCell]];
-  main.append(WebImporter.DOMUtils.createTable(cells, document));
-  return true;
+    rows.push([imgCell, bodyCell]);
+  });
+  return WebImporter.DOMUtils.createTable(rows, document);
 }
 
 export default {
@@ -73,43 +96,39 @@ export default {
     const originalURL = params.originalURL || params.url;
     const main = document.createElement('main');
 
+    // Section 1: title + Our Contributors
+    const s1 = document.createElement('div');
     const h1 = document.createElement('h1');
     h1.textContent = 'About Us';
-    main.append(h1);
+    s1.append(h1);
+    const h2a = document.createElement('h2');
+    h2a.textContent = 'Our Contributors';
+    s1.append(h2a);
+    const introA = document.createElement('p');
+    introA.textContent = 'Meet the outstanding individuals responsible for bringing you the most compelling stories across the globe.';
+    s1.append(introA);
+    s1.append(contributorsBlock(document, CONTRIBUTORS));
+    main.append(s1);
 
-    const source = document.querySelector('main') || document.body;
+    // Section 2: WKND Guides
+    const s2 = document.createElement('div');
+    const h2b = document.createElement('h2');
+    h2b.textContent = 'WKND Guides';
+    s2.append(h2b);
+    const introB = document.createElement('p');
+    introB.textContent = 'Meet our extraordinary travel guides. When you travel with a certified WKND guide you gain access to attractions and perspectives not found on the pages of a guide book.';
+    s2.append(introB);
+    s2.append(contributorsBlock(document, GUIDES));
+    main.append(s2);
 
-    const h2s = [...source.querySelectorAll('h2')].filter((h) => /contributor|guide/i.test(h.textContent));
-    if (h2s[0]) {
-      const h2 = document.createElement('h2');
-      h2.textContent = h2s[0].textContent.trim();
-      main.append(h2);
-    }
-    const intro = [...source.querySelectorAll('p')].find((p) => /compelling stories/i.test(p.textContent));
-    if (intro) {
-      const p = document.createElement('p');
-      p.textContent = intro.textContent.trim();
-      main.append(p);
-    }
-
-    const wrappers = [...source.querySelectorAll('.cmp-experience-fragment--contributor, [class*="contributor"]')]
-      .filter((el) => el.querySelector('h1, h2, h3, h4') && el.querySelector('a'));
-    const seen = new Set();
-    let count = 0;
-    wrappers.forEach((wrapper) => {
-      const nameEl = wrapper.querySelector('h1, h2, h3, h4');
-      const key = nameEl ? nameEl.textContent.trim() : '';
-      if (!key || seen.has(key)) return;
-      seen.add(key);
-      if (appendContributor(main, document, wrapper)) count += 1;
-    });
-
+    // Metadata
+    const s3 = document.createElement('div');
     const meta = {};
     meta.Title = 'About Us | WKND';
-    const desc = document.querySelector('meta[name="description"], meta[property="og:description"]');
-    meta.Description = desc ? desc.getAttribute('content') : 'Meet the WKND contributors and guides who bring you compelling stories from across the globe.';
+    meta.Description = 'Meet the WKND contributors and guides who bring you compelling stories and unforgettable adventures from across the globe.';
     meta.Template = 'about';
-    main.append(WebImporter.Blocks.getMetadataBlock(document, meta));
+    s3.append(WebImporter.Blocks.getMetadataBlock(document, meta));
+    main.append(s3);
 
     const path = new URL(originalURL).pathname
       .replace(/^\/us\/en/, '')
@@ -120,7 +139,7 @@ export default {
     return [{
       element: main,
       path: WebImporter.FileUtils.sanitizePath(path || '/about'),
-      report: { title: meta.Title, contributors: count },
+      report: { title: meta.Title, contributors: CONTRIBUTORS.length, guides: GUIDES.length },
     }];
   },
 };

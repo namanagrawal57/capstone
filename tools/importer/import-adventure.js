@@ -8,6 +8,27 @@
 
 const PROXY = 'https://wknd.site';
 
+// Maps each adventure slug to its Adventures-page filter category
+// (matches the tabs on wknd.site: Climbing / Cycling / Skiing / Surfing / Travel).
+const CATEGORY_BY_SLUG = {
+  'bali-surf-camp': 'Surfing',
+  'beervana-portland': 'Travel',
+  'climbing-new-zealand': 'Climbing',
+  'colorado-rock-climbing': 'Climbing',
+  'cycling-southern-utah': 'Cycling',
+  'cycling-tuscany': 'Cycling',
+  'downhill-skiing-wyoming': 'Skiing',
+  'gastronomic-marais-tour': 'Travel',
+  'napa-wine-tasting': 'Travel',
+  'riverside-camping-australia': 'Travel',
+  'ski-touring-mont-blanc': 'Skiing',
+  'surf-camp-costa-rica': 'Surfing',
+  'tahoe-skiing': 'Skiing',
+  'west-coast-cycling': 'Cycling',
+  'whistler-mountain-biking': 'Cycling',
+  'yosemite-backpacking': 'Travel',
+};
+
 function resolveImage(document, el, alt = '') {
   if (!el) return null;
   const imgEl = el.tagName === 'IMG' ? el : el.querySelector('img');
@@ -128,7 +149,8 @@ export default {
       mimg.src = hero.src;
       meta.Image = mimg;
     }
-    meta.Category = 'Adventure';
+    const slug = new URL(originalURL).pathname.replace(/\.html$/, '').split('/').pop();
+    meta.Category = CATEGORY_BY_SLUG[slug] || 'Travel';
     meta.Template = 'adventure';
     s3.append(WebImporter.Blocks.getMetadataBlock(document, meta));
     main.append(s3);
