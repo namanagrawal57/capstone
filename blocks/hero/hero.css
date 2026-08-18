@@ -22,10 +22,19 @@
   background: linear-gradient(180deg, transparent 0%, var(--overlay-color) 100%);
 }
 
+/* content wrapper is absolutely pinned to the bottom (see styles.css) so the
+   heading's font-swap reflow costs zero layout shift; pad it horizontally here
+   since the parent's padding doesn't apply to an out-of-flow child */
 .hero > div {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 48px;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
 }
 
 .hero h1 {
@@ -58,5 +67,10 @@
   .hero {
     padding: 64px 32px;
     min-height: 72vh;
+  }
+
+  .hero > div {
+    bottom: 64px;
+    padding: 0 32px;
   }
 }

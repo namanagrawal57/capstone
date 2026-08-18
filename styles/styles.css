@@ -379,8 +379,26 @@ main .hero > picture img {
   object-fit: cover;
 }
 
+/*
+ * Anchor the hero content to the bottom, out of flow. The heading reflows when
+ * the Asar web font swaps in (fallback wraps to a different height); if the
+ * content is in-flow and bottom-aligned, that height change moves its top and
+ * registers as CLS. Taking it out of flow (absolute, pinned to the bottom of
+ * the reserved-height hero) makes those reflows cost zero layout shift.
+ */
+main .hero > div {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 48px;
+}
+
 @media (width >= 900px) {
   main .hero {
     min-height: 72vh;
+  }
+
+  main .hero > div {
+    bottom: 64px;
   }
 }
