@@ -12,7 +12,7 @@
 
 .adventure-details .adventure-details-item {
   padding: 16px 0;
-  border-bottom: 1px solid #dadada;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .adventure-details .adventure-details-item dt {

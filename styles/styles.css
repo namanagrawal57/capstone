@@ -20,6 +20,17 @@
   --accent-hover-color: #e6d200;
   --link-color: #202020;
   --link-hover-color: #000;
+  --border-color: #dadada; /* card / divider borders — re-skins per brand */
+
+  /* dark UI surface (header bar / footer) + its foreground */
+  --dark-surface-color: #202020;
+  --dark-surface-text: #ebebeb;
+  --field-bg-color: rgb(235 235 235 / 54%); /* search field on the dark-adjacent bar */
+  --field-placeholder-color: #595959; /* AA-contrast placeholder on the field */
+
+  /* overlays / elevation */
+  --overlay-color: rgb(0 0 0 / 55%);
+  --shadow-color: rgb(0 0 0 / 12%);
 
   /* fonts — WKND uses Asar (serif) for headings, Source Sans Pro for body */
   --body-font-family: "Source Sans Pro", source-sans-fallback, "Helvetica Neue", helvetica, arial, sans-serif;
@@ -47,14 +58,20 @@
 /* fallback fonts (metric-adjusted to reduce CLS while web fonts load) */
 @font-face {
   font-family: asar-fallback;
-  size-adjust: 106%;
   src: local('Georgia');
+  size-adjust: 103%;
+  ascent-override: 95%;
+  descent-override: 24%;
+  line-gap-override: 0%;
 }
 
 @font-face {
   font-family: source-sans-fallback;
-  size-adjust: 98%;
   src: local('Arial');
+  size-adjust: 105%;
+  ascent-override: 91%;
+  descent-override: 28%;
+  line-gap-override: 0%;
 }
 
 @media (width >= 900px) {
@@ -328,4 +345,42 @@ main .section.highlight {
   background-color: var(--light-color);
   margin: 0;
   padding: 40px 0;
+}
+
+/*
+ * Eager-phase reservation for the hero block. The hero is the LCP element but
+ * its block CSS (blocks/hero/hero.css) loads in the lazy phase, so without this
+ * the hero content collapses to 0 height then reflows when the CSS arrives —
+ * causing ~0.04 CLS on the home page. Reserving the min-height here (before the
+ * block CSS loads) keeps the layout stable. Kept in sync with hero.css.
+ */
+main .hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 60vh;
+}
+
+/*
+ * Take the hero image out of flow eagerly. Without this, before hero.css loads
+ * the <picture> renders inline (in flow) and pushes the hero text down; when
+ * hero.css later makes it position:absolute the text jumps up — the ~0.04 CLS.
+ */
+main .hero > picture {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+main .hero > picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (width >= 900px) {
+  main .hero {
+    min-height: 72vh;
+  }
 }

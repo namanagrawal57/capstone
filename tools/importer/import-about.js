@@ -2,7 +2,7 @@
 /*
  * Import script for the WKND About Us page.
  * Matches wknd.site: two sections — "Our Contributors" (4) and "WKND Guides"
- * (3) — each an intro + a Contributors grid block (avatar, name, role, social).
+ * (3) — each an intro + a Contributor (grid) block (avatar, name, role, social).
  * Self-contained; contributor roster is curated from the source page.
  */
 
@@ -58,9 +58,9 @@ const GUIDES = [
   },
 ];
 
-/** Builds a Contributors grid block table for a list of people. */
+/** Builds a Contributor (grid) block table for a list of people. */
 function contributorsBlock(document, people) {
-  const rows = [['Contributors']];
+  const rows = [['Contributor (grid)']];
   people.forEach((person) => {
     const imgCell = document.createElement('div');
     const img = document.createElement('img');

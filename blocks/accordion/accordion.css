@@ -1,5 +1,5 @@
 .accordion .accordion-item {
-  border-bottom: 1px solid #dadada;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .accordion .accordion-item-label {
