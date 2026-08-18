@@ -5,13 +5,13 @@ header .nav-wrapper {
   width: 100%;
   z-index: 2;
   position: fixed;
-  box-shadow: 0 1px 0 rgb(0 0 0 / 8%);
+  box-shadow: 0 1px 0 var(--shadow-color);
 }
 
 /* top utility strip: Sign In (left) + language toggle (right) */
 header .nav-utility {
-  background-color: #202020;
-  color: #ebebeb;
+  background-color: var(--dark-surface-color);
+  color: var(--dark-surface-text);
   height: var(--nav-utility-height);
 }
 
@@ -28,7 +28,7 @@ header .nav-utility-inner {
 }
 
 header .nav-utility a:any-link {
-  color: #ebebeb;
+  color: var(--dark-surface-text);
   font-size: 14px;
   text-transform: uppercase;
   text-decoration: none;
@@ -352,7 +352,7 @@ header .nav-search {
   gap: 8px;
   height: 40px;
   padding: 0 14px;
-  background-color: rgb(235 235 235 / 54%);
+  background-color: var(--field-bg-color);
 }
 
 header .nav-search-icon {
@@ -379,8 +379,8 @@ header .nav-search-input {
 }
 
 header .nav-search-input::placeholder {
-  /* #595959 on the ~#f4f4f4 field = 6.4:1, a comfortable AA margin */
-  color: #595959;
+  /* ~6.4:1 on the search field — comfortable AA margin */
+  color: var(--field-placeholder-color);
   opacity: 1;
 }
 

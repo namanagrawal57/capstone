@@ -4,42 +4,37 @@ import { buildSocialList } from '../social-links/social-icons.js';
 /*
  * Contributor block
  *
- * Presents a writer/photographer/guide: avatar, name, title/role, and
+ * Presents a writer / photographer / guide: avatar, name, title/role, and
  * (optionally) their social links.
  *
- * Content model:
- *   | Contributor |                                   |
- *   | ----------- | --------------------------------- |
- *   | <avatar>    | ### Stacey Roswells               |
- *   |             | Artist \| Photographer \| Traveler |
- *   |             | (optional list of social links)   |
+ * Two modes, one block:
+ *  - default: a single card (article byline, a lone contributor).
+ *      | Contributor |                                    |
+ *      | ----------- | ---------------------------------- |
+ *      | <avatar>    | ### Name                           |
+ *      |             | Role                               |
+ *      |             | (optional list of social links)    |
+ *  - `contributor (grid)` variant: a responsive grid, one card per row.
+ *      | Contributor (grid) |                     |
+ *      | <avatar> | ### Name / ##### Role / social |
+ *      | <avatar> | ### Name / ##### Role / social |
  *
- * The avatar cell is optional. Any anchors found are rendered as accessible
- * social icon buttons (reusing the social-links icon rendering).
+ * The avatar cell is optional. Any anchors are rendered as accessible social
+ * icon buttons (reusing the social-links icon rendering).
  */
 
 /**
- * Finds the cell that holds the avatar picture/image, if any.
- * @param {Element[]} cells
- * @returns {Element|null}
+ * Builds a single contributor card from a set of cells.
+ * @param {Element[]} cells the cells belonging to one person
+ * @returns {HTMLElement|null}
  */
-function findImageCell(cells) {
-  return cells.find((cell) => cell.querySelector('picture, img')) || null;
-}
-
-/**
- * loads and decorates the contributor block
- * @param {Element} block The block element
- */
-export default function decorate(block) {
-  const rows = [...block.children];
-  const cells = rows.flatMap((row) => [...row.children]);
-
-  const imageCell = findImageCell(cells);
+function buildCard(cells) {
+  const imageCell = cells.find((cell) => cell.querySelector('picture, img')) || null;
   const bodyCells = cells.filter((cell) => cell !== imageCell);
+  if (!bodyCells.length && !imageCell) return null;
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'contributor-card';
+  const card = document.createElement('div');
+  card.className = 'contributor-card';
 
   // Avatar
   if (imageCell) {
@@ -51,10 +46,10 @@ export default function decorate(block) {
     } else {
       avatar.append(...imageCell.childNodes);
     }
-    wrapper.append(avatar);
+    card.append(avatar);
   }
 
-  // Body: name, title/role, and social links
+  // Body: name, role, social links
   const body = document.createElement('div');
   body.className = 'contributor-body';
   bodyCells.forEach((cell) => {
@@ -63,26 +58,60 @@ export default function decorate(block) {
 
   const name = body.querySelector('h1, h2, h3, h4, h5, h6');
   if (name) name.classList.add('contributor-name');
-  const title = name?.nextElementSibling;
-  if (title && title.tagName === 'P') title.classList.add('contributor-title');
+  // The role may be authored as a heading (h5) but is really a subtitle; render
+  // it as a <p> so heading levels don't skip (avoids axe/Lighthouse
+  // heading-order). A role already authored as <p> is just tagged.
+  const role = name?.nextElementSibling;
+  if (role && /^H[1-6]$/.test(role.tagName)) {
+    const p = document.createElement('p');
+    p.className = 'contributor-title';
+    p.textContent = role.textContent;
+    role.replaceWith(p);
+  } else if (role && role.tagName === 'P') {
+    role.classList.add('contributor-title');
+  }
 
   // Turn any anchors into an accessible social icon row.
   const anchors = [...body.querySelectorAll('a[href]')];
   if (anchors.length) {
-    const socialWrap = document.createElement('div');
-    socialWrap.className = 'social-links contributor-social';
-    socialWrap.append(buildSocialList(anchors, document));
+    const social = document.createElement('div');
+    social.className = 'social-links contributor-social';
+    social.append(buildSocialList(anchors, document));
     // remove any now-empty list/paragraph that held the raw links
-    anchors.forEach((a) => {
-      const container = a.closest('ul, p');
-      if (container && !container.querySelector('a[href]:not([class])')) { /* handled below */ }
-    });
     body.querySelectorAll('ul, p').forEach((el) => {
       if (!el.textContent.trim() && !el.querySelector('a, img, picture')) el.remove();
     });
-    body.append(socialWrap);
+    body.append(social);
   }
 
-  wrapper.append(body);
-  block.replaceChildren(wrapper);
+  card.append(body);
+  return card;
+}
+
+/**
+ * loads and decorates the contributor block
+ * @param {Element} block The block element
+ */
+export default function decorate(block) {
+  const rows = [...block.children];
+
+  if (block.classList.contains('grid')) {
+    // grid variant: one card per row
+    const list = document.createElement('ul');
+    list.className = 'contributor-grid';
+    rows.forEach((row) => {
+      const card = buildCard([...row.children]);
+      if (!card) return;
+      const li = document.createElement('li');
+      li.append(card);
+      list.append(li);
+    });
+    block.replaceChildren(list);
+    return;
+  }
+
+  // default: a single card from all cells across rows
+  const cells = rows.flatMap((row) => [...row.children]);
+  const card = buildCard(cells);
+  block.replaceChildren(card || document.createElement('div'));
 }

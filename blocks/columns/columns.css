@@ -3,8 +3,13 @@
   flex-direction: column;
 }
 
+/* reserve space for images so lazy-loaded columns images don't shift layout
+   (keeps CLS ~0 on pages like the home featured teaser) */
 .columns img {
   width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 .columns > div > div {
