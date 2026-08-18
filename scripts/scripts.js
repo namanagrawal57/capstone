@@ -169,6 +169,11 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
+    // Prioritise the LCP image: aem.js sets loading="eager" on the first
+    // section's image, but not fetchpriority. Adding it here pulls the hero
+    // image forward in the network queue (Lighthouse "LCP request discovery").
+    const lcpImg = main.querySelector('.section img');
+    if (lcpImg) lcpImg.setAttribute('fetchpriority', 'high');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
 
