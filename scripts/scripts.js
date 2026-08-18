@@ -178,8 +178,11 @@ async function loadEager(doc) {
   }
 
   try {
-    /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
-    if (window.innerWidth >= 900 || sessionStorage.getItem('fonts-loaded')) {
+    /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css.
+       Use matchMedia rather than window.innerWidth: reading innerWidth here forces
+       a synchronous layout recalc (a "forced reflow") after the eager DOM
+       decoration, matchMedia evaluates the same breakpoint without one. */
+    if (window.matchMedia('(min-width: 900px)').matches || sessionStorage.getItem('fonts-loaded')) {
       loadFonts();
     }
   } catch (e) {
