@@ -1,18 +1,18 @@
+/* Inline fact row (Activity · Adventure Type · Trip Length · …) — matches
+   wknd.site: no card/background, facts sit in a wrapping flex row. */
 .adventure-details {
-  background-color: var(--light-color);
-  padding: 24px;
+  padding: 0;
 }
 
 .adventure-details .adventure-details-list {
   margin: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 48px;
 }
 
 .adventure-details .adventure-details-item {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border-color);
+  padding: 0;
 }
 
 .adventure-details .adventure-details-item dt {
@@ -23,19 +23,9 @@
 }
 
 .adventure-details .adventure-details-item dd {
-  margin: 4px 0 0;
-  font-family: var(--heading-font-family);
-  font-size: var(--heading-font-size-s);
-}
-
-@media (width >= 900px) {
-  .adventure-details .adventure-details-list {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0 32px;
-  }
-
-  /* remove the bottom border on the last row of the 3-column grid */
-  .adventure-details .adventure-details-item:nth-last-child(-n+3) {
-    border-bottom: 0;
-  }
+  margin: 6px 0 0;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: var(--body-font-size-xs);
 }
