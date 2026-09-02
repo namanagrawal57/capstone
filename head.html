@@ -232,11 +232,44 @@ main .hero > div {
    body.article are set in the eager phase, before first paint. */
 body.adventure main .section { max-width: 960px; margin-left: auto; margin-right: auto; }
 body.article main > .section { max-width: 720px; margin-left: auto; margin-right: auto; }
-/* Tabs pre-decoration: the raw block stacks every panel visibly; before tabs.js
-   runs (lazy phase) show only the first tab body so the block's height matches
-   its decorated state — prevents a large CLS when the panels collapse. Once
-   decorated the DOM changes and these `> div` selectors stop matching. */
+/* Adventure first-section blocks live above the fold but their block CSS/JS
+   load in the lazy phase. Give them their final layout here (critical) so they
+   don't reflow when that CSS arrives — the main CLS source on this template.
+   Rules target both the raw (pre-decoration) and decorated DOM. */
+
+/* details: inline wrapping fact row (raw `> div` pairs and decorated <dl>) */
+.adventure-details,
+.adventure-details .adventure-details-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 48px;
+  margin: 0;
+  padding: 0;
+}
+
+.adventure-details > div > div:first-child,
+.adventure-details dt {
+  font-size: var(--body-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--dark-color);
+}
+
+.adventure-details > div > div:last-child,
+.adventure-details dd {
+  margin: 6px 0 0;
+  font-size: var(--body-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* tabs pre-decoration: show only the first tab body + hide label cells so the
+   raw block's height matches the decorated "Overview selected" state, and
+   reserve the ~45px tab-strip height up front so the strip appearing on
+   decoration doesn't push content down. */
 .tabs > div:not(:first-child) { display: none; }
+.tabs > div:first-child { padding-top: 45px; }
 .tabs > div:first-child > div:first-child { display: none; }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"/>

@@ -8,6 +8,10 @@
   display: none;
 }
 
+.tabs > div:first-child {
+  padding-top: 45px; /* reserve the tab-strip height (see head.html critical CSS) */
+}
+
 .tabs > div:first-child > div:first-child {
   display: none;
 }
