@@ -232,6 +232,10 @@ main .hero > div {
    body.article are set in the eager phase, before first paint. */
 body.adventure main .section { max-width: 960px; margin-left: auto; margin-right: auto; }
 body.article main > .section { max-width: 720px; margin-left: auto; margin-right: auto; }
+/* yellow accent rule under the adventure H1 — critical so the H1's extra height
+   (padding + border) is reserved at first paint (else it grows ~19px when
+   lazy-styles.css loads and pushes everything below down: CLS). */
+body.adventure main .section:first-of-type h1 { padding-bottom: 16px; border-bottom: 3px solid var(--accent-color); }
 /* Adventure first-section blocks live above the fold but their block CSS/JS
    load in the lazy phase. Give them their final layout here (critical) so they
    don't reflow when that CSS arrives — the main CLS source on this template.
