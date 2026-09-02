@@ -299,10 +299,11 @@ body.article main > .section:first-of-type p:first-child picture img {
 /* tabs pre-decoration: show only the first tab body + hide label cells so the
    raw block's height matches the decorated "Overview selected" state, and
    reserve the ~45px tab-strip height up front so the strip appearing on
-   decoration doesn't push content down. */
-.tabs > div:not(:first-child) { display: none; }
-.tabs > div:first-child { padding-top: 45px; }
-.tabs > div:first-child > div:first-child { display: none; }
+   decoration doesn't push content down. Scoped to the UNDECORATED block only
+   (before data-block-status="loaded") so it never hides the decorated panels. */
+.tabs:not([data-block-status="loaded"]) > div:not(:first-child) { display: none; }
+.tabs:not([data-block-status="loaded"]) > div:first-child { padding-top: 45px; }
+.tabs:not([data-block-status="loaded"]) > div:first-child > div:first-child { display: none; }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"/>
 <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml"/>
