@@ -272,6 +272,21 @@ body.article main > .section { max-width: 720px; margin-left: auto; margin-right
   text-transform: uppercase;
 }
 
+/* reserve the detail/article hero image box up front (16:9) so it can't shift
+   content below while the image loads — the largest mobile CLS source. */
+body.adventure main > .section:first-of-type picture,
+body.article main > .section:first-of-type p:first-child picture {
+  display: block;
+  aspect-ratio: 16 / 9;
+}
+
+body.adventure main > .section:first-of-type picture img,
+body.article main > .section:first-of-type p:first-child picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* share pre-decoration: reserve the decorated height (label + one row of links)
    so the block doesn't grow when share.js runs. */
 .share { min-height: 66px; }
