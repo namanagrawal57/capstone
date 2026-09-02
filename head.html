@@ -227,6 +227,82 @@ main .hero > div {
   main .hero { min-height: 72vh; }
   main .hero > div { bottom: 64px; }
 }
+/* Detail-template reading-column widths — critical so the section paints at its
+   final width (no reflow/CLS when lazy-styles.css loads). body.adventure /
+   body.article are set in the eager phase, before first paint. */
+body.adventure main .section { max-width: 960px; margin-left: auto; margin-right: auto; }
+body.article main > .section { max-width: 720px; margin-left: auto; margin-right: auto; }
+/* yellow accent rule under the adventure H1 — critical so the H1's extra height
+   (padding + border) is reserved at first paint (else it grows ~19px when
+   lazy-styles.css loads and pushes everything below down: CLS). */
+body.adventure main .section:first-of-type h1 { padding-bottom: 16px; border-bottom: 3px solid var(--accent-color); }
+/* Adventure first-section blocks live above the fold but their block CSS/JS
+   load in the lazy phase. Give them their final layout here (critical) so they
+   don't reflow when that CSS arrives — the main CLS source on this template.
+   Rules target both the raw (pre-decoration) and decorated DOM. */
+
+/* details: inline wrapping fact row. The flex CONTAINER is the raw block /
+   decorated <dl>; the flex ITEMS are the fact pairs (raw `> div`, decorated
+   `.adventure-details-item`), each stacking its own label over value. */
+.adventure-details,
+.adventure-details .adventure-details-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 48px;
+  margin: 0;
+  padding: 0;
+}
+
+.adventure-details > div,
+.adventure-details .adventure-details-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.adventure-details > div > div:first-child,
+.adventure-details dt {
+  font-size: var(--body-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--dark-color);
+}
+
+.adventure-details > div > div:last-child,
+.adventure-details dd {
+  margin: 6px 0 0;
+  font-size: var(--body-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Reserve the detail/article hero image box from the image's own width/height
+   attributes so it can't shift content below while loading — the largest mobile
+   CLS source. The adventures have varied aspect ratios, so derive the ratio
+   per-image from the attributes (width:100% + height:auto lets the browser use
+   the intrinsic ratio) rather than hard-coding one. */
+body.adventure main > .section:first-of-type picture,
+body.article main > .section:first-of-type p:first-child picture {
+  display: block;
+}
+
+body.adventure main > .section:first-of-type picture img,
+body.article main > .section:first-of-type p:first-child picture img {
+  width: 100%;
+  height: auto;
+}
+
+/* share pre-decoration: reserve the decorated height (label + one row of links)
+   so the block doesn't grow when share.js runs. */
+.share { min-height: 66px; }
+
+/* tabs pre-decoration: show only the first tab body + hide label cells so the
+   raw block's height matches the decorated "Overview selected" state, and
+   reserve the ~45px tab-strip height up front so the strip appearing on
+   decoration doesn't push content down. */
+.tabs > div:not(:first-child) { display: none; }
+.tabs > div:first-child { padding-top: 45px; }
+.tabs > div:first-child > div:first-child { display: none; }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"/>
 <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml"/>

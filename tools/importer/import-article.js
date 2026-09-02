@@ -39,7 +39,22 @@ function resolveImage(document, el, alt = '') {
 }
 
 /**
+ * Reads an image's *rendered* caption. On wknd.site only images with an authored
+ * caption render a `.cmp-image__title` element (the asset `dc:title` alone is not
+ * shown), so that element is the reliable source. Returns '' when there's none.
+ */
+function imageCaption(node) {
+  const holder = node.tagName === 'IMG'
+    ? (node.closest('[data-cmp-is="image"]') || node.closest('.cmp-image') || node.parentElement)
+    : node;
+  if (!holder) return '';
+  const titleEl = holder.querySelector('.cmp-image__title');
+  return titleEl ? titleEl.textContent.trim() : '';
+}
+
+/**
  * Extracts article body nodes from the content-fragment region, in order.
+ * Images keep any authored caption (rendered as an italic line beneath them).
  */
 function extractBody(document, titleText) {
   const cf = document.querySelector('.cmp-contentfragment, article.contentfragment');
@@ -56,6 +71,12 @@ function extractBody(document, titleText) {
         seen.add(img.src);
         const p = document.createElement('p');
         p.append(img);
+        const caption = imageCaption(node);
+        if (caption) {
+          const em = document.createElement('em');
+          em.textContent = caption;
+          p.append(document.createElement('br'), em);
+        }
         container.append(p);
       }
       return;
@@ -146,9 +167,17 @@ export default {
         });
         bodyCell.append(ul);
       }
-      const cells = avatar ? [['Contributor'], [avatarCell, bodyCell]] : [['Contributor'], [bodyCell]];
+      const cells = avatar
+        ? [['Contributor (byline)'], [avatarCell, bodyCell]]
+        : [['Contributor (byline)'], [bodyCell]];
       main.append(WebImporter.DOMUtils.createTable(cells, document));
     }
+
+    // Share this Story widget
+    main.append(WebImporter.DOMUtils.createTable([
+      ['Share'],
+      ['Share this Story'],
+    ], document));
 
     // Metadata
     const slug = new URL(originalURL).pathname.replace(/\.html$/, '').split('/').pop();

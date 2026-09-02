@@ -1,0 +1,97 @@
+/* Pre-decoration state: the raw block renders every tab (label + body) stacked
+   and visible. Show only the first tab's body and hide the rest so the block's
+   height matches the decorated "Overview selected" state — this avoids a large
+   layout shift (CLS) when tabs.js collapses the panels in the lazy phase.
+   Once decorated, replaceChildren() swaps in .tabs-list/.tabs-panel and these
+   `> div` selectors no longer match. */
+.tabs > div:not(:first-child) {
+  display: none;
+}
+
+.tabs > div:first-child {
+  padding-top: 45px; /* reserve the tab-strip height (see head.html critical CSS) */
+}
+
+.tabs > div:first-child > div:first-child {
+  display: none;
+}
+
+.tabs .tabs-list {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 24px;
+
+  /* Fixed strip height on every viewport so it always matches the reserved
+     45px (44px strip + 1px border) — no wrap/height-driven CLS. Tabs stay a
+     single row and scroll horizontally if they overflow. */
+  box-sizing: border-box;
+  height: 45px;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs .tabs-list::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs .tabs-tab {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 12px 14px;
+  background: transparent;
+  color: var(--dark-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+@media (width >= 600px) {
+  .tabs .tabs-tab {
+    padding: 12px 20px;
+    letter-spacing: 0.06em;
+  }
+}
+
+.tabs .tabs-tab[aria-selected="true"] {
+  background: var(--text-color);
+  color: var(--background-color);
+}
+
+.tabs .tabs-tab:hover {
+  color: var(--text-color);
+}
+
+.tabs .tabs-tab[aria-selected="true"]:hover {
+  color: var(--background-color);
+}
+
+.tabs .tabs-tab:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: -2px;
+}
+
+.tabs .tabs-panel[hidden] {
+  display: none;
+}
+
+.tabs .tabs-panel > :first-child {
+  margin-top: 0;
+}
+
+.tabs .tabs-panel ul,
+.tabs .tabs-panel ol {
+  padding-left: 1.2em;
+}
+
+.tabs .tabs-panel img {
+  max-width: 100%;
+  height: auto;
+}

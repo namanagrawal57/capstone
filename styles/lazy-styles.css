@@ -1,5 +1,76 @@
 /* add global styles that can be loaded post LCP here */
 
+/* ---- Adventure detail + Magazine article templates ------------------------
+   Adventure (body.adventure): full-bleed hero, yellow accent rule under the
+   H1, comfortable single column. Article (body.article): narrow centered
+   reading column, styled byline, image captions, horizontal author card.
+   Selectors are ordered low→high specificity for stylelint. */
+body.article main h1 {
+  margin-bottom: 8px;
+}
+
+body.article main img {
+  width: 100%;
+  height: auto;
+}
+
+body.article main hr {
+  margin: 40px 0;
+  border: 0;
+  border-top: 1px solid var(--border-color);
+}
+
+/* image captions: an <em> after the <img> (and <br>) inside the image paragraph */
+body.article main p img + br + em {
+  display: block;
+  margin-top: 6px;
+  color: var(--dark-color);
+  font-size: var(--body-font-size-xs);
+  font-style: italic;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+body.adventure main .section {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.article main > .section {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* byline: "By Author" rendered as an <em>-only paragraph under the H1 */
+body.article main p > em:only-child {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--dark-color);
+  font-style: normal;
+  font-size: var(--body-font-size-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+body.adventure main > .section:first-of-type {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* yellow accent rule under the adventure H1 */
+body.adventure main .section:first-of-type h1 {
+  padding-bottom: 16px;
+  border-bottom: 3px solid var(--accent-color);
+}
+
+/* hero image spans the full column width */
+body.article main > .section:first-of-type > div > p:first-child img {
+  width: 100%;
+}
+
+
 /* Secondary/accent button variants and all disabled states. These are never
    above the fold (the only above-the-fold CTA is the hero primary button, which
    stays in the render-blocking critical CSS), so they load post-LCP to keep the

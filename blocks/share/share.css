@@ -1,0 +1,32 @@
+.share {
+  margin: 8px 0 24px;
+}
+
+.share .share-title {
+  margin: 0 0 12px;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.share .share-links {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.share .share-link {
+  color: var(--text-color);
+  font-size: var(--body-font-size-xs);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.share .share-link:hover {
+  color: var(--dark-color);
+}
