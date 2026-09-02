@@ -237,7 +237,9 @@ body.article main > .section { max-width: 720px; margin-left: auto; margin-right
    don't reflow when that CSS arrives — the main CLS source on this template.
    Rules target both the raw (pre-decoration) and decorated DOM. */
 
-/* details: inline wrapping fact row (raw `> div` pairs and decorated <dl>) */
+/* details: inline wrapping fact row. The flex CONTAINER is the raw block /
+   decorated <dl>; the flex ITEMS are the fact pairs (raw `> div`, decorated
+   `.adventure-details-item`), each stacking its own label over value. */
 .adventure-details,
 .adventure-details .adventure-details-list {
   display: flex;
@@ -245,6 +247,12 @@ body.article main > .section { max-width: 720px; margin-left: auto; margin-right
   gap: 24px 48px;
   margin: 0;
   padding: 0;
+}
+
+.adventure-details > div,
+.adventure-details .adventure-details-item {
+  display: flex;
+  flex-direction: column;
 }
 
 .adventure-details > div > div:first-child,
@@ -263,6 +271,10 @@ body.article main > .section { max-width: 720px; margin-left: auto; margin-right
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+/* share pre-decoration: reserve the decorated height (label + one row of links)
+   so the block doesn't grow when share.js runs. */
+.share { min-height: 66px; }
 
 /* tabs pre-decoration: show only the first tab body + hide label cells so the
    raw block's height matches the decorated "Overview selected" state, and
