@@ -1,3 +1,17 @@
+/* Pre-decoration state: the raw block renders every tab (label + body) stacked
+   and visible. Show only the first tab's body and hide the rest so the block's
+   height matches the decorated "Overview selected" state — this avoids a large
+   layout shift (CLS) when tabs.js collapses the panels in the lazy phase.
+   Once decorated, replaceChildren() swaps in .tabs-list/.tabs-panel and these
+   `> div` selectors no longer match. */
+.tabs > div:not(:first-child) {
+  display: none;
+}
+
+.tabs > div:first-child > div:first-child {
+  display: none;
+}
+
 .tabs .tabs-list {
   display: flex;
   gap: 0;

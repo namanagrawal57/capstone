@@ -232,6 +232,12 @@ main .hero > div {
    body.article are set in the eager phase, before first paint. */
 body.adventure main .section { max-width: 960px; margin-left: auto; margin-right: auto; }
 body.article main > .section { max-width: 720px; margin-left: auto; margin-right: auto; }
+/* Tabs pre-decoration: the raw block stacks every panel visibly; before tabs.js
+   runs (lazy phase) show only the first tab body so the block's height matches
+   its decorated state — prevents a large CLS when the panels collapse. Once
+   decorated the DOM changes and these `> div` selectors stop matching. */
+.tabs > div:not(:first-child) { display: none; }
+.tabs > div:first-child > div:first-child { display: none; }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"/>
 <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml"/>
