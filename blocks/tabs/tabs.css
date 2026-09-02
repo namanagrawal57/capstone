@@ -21,22 +21,39 @@
   gap: 0;
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 24px;
+
+  /* keep the strip a single row on every viewport (scroll if it overflows) so
+     its height always matches the reserved 45px — no wrap-driven CLS on mobile */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs .tabs-list::-webkit-scrollbar {
+  display: none;
 }
 
 .tabs .tabs-tab {
   margin: 0;
   border: 0;
   border-radius: 0;
-  padding: 12px 20px;
+  padding: 12px 14px;
   background: transparent;
   color: var(--dark-color);
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-xs);
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
+}
+
+@media (width >= 600px) {
+  .tabs .tabs-tab {
+    padding: 12px 20px;
+    letter-spacing: 0.06em;
+  }
 }
 
 .tabs .tabs-tab[aria-selected="true"] {
