@@ -27,7 +27,8 @@ export default function decorate(block) {
   const heading = (block.textContent || '').trim() || 'Share this Story';
   const pageUrl = encodeURIComponent(window.location.href);
 
-  const title = document.createElement('h5');
+  // Rendered as a <p> (not a heading) to avoid heading-order skips (h1 → h5).
+  const title = document.createElement('p');
   title.className = 'share-title';
   title.textContent = heading;
 

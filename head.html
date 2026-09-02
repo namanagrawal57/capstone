@@ -227,6 +227,11 @@ main .hero > div {
   main .hero { min-height: 72vh; }
   main .hero > div { bottom: 64px; }
 }
+/* Detail-template reading-column widths — critical so the section paints at its
+   final width (no reflow/CLS when lazy-styles.css loads). body.adventure /
+   body.article are set in the eager phase, before first paint. */
+body.adventure main .section { max-width: 960px; margin-left: auto; margin-right: auto; }
+body.article main > .section { max-width: 720px; margin-left: auto; margin-right: auto; }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"/>
 <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml"/>
