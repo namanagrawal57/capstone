@@ -272,19 +272,20 @@ body.article main > .section { max-width: 720px; margin-left: auto; margin-right
   text-transform: uppercase;
 }
 
-/* reserve the detail/article hero image box up front (16:9) so it can't shift
-   content below while the image loads — the largest mobile CLS source. */
+/* Reserve the detail/article hero image box from the image's own width/height
+   attributes so it can't shift content below while loading — the largest mobile
+   CLS source. The adventures have varied aspect ratios, so derive the ratio
+   per-image from the attributes (width:100% + height:auto lets the browser use
+   the intrinsic ratio) rather than hard-coding one. */
 body.adventure main > .section:first-of-type picture,
 body.article main > .section:first-of-type p:first-child picture {
   display: block;
-  aspect-ratio: 16 / 9;
 }
 
 body.adventure main > .section:first-of-type picture img,
 body.article main > .section:first-of-type p:first-child picture img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
 }
 
 /* share pre-decoration: reserve the decorated height (label + one row of links)
